@@ -1,13 +1,17 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
 interface UserInfo {
     name: string;
-    phone: string;
+    phone: number;
     email: string;
 }
 
 function Home() {
-    const [user, setUser] = useState<UserInfo>({ name: '', phone: '', email: '' });
+    const [user, setUser] = useState<UserInfo>({
+        name: '',
+        phone: 0,
+        email: ''
+    });
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
