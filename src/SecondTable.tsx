@@ -20,86 +20,58 @@ interface TablePaginationActionsProps {
   count: number;
   page: number;
   rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number,
-  ) => void;
+  onPageChange: (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    onPageChange(event, 0);
+  const handleFirstPageButtonClick = () => {
+    onPageChange(null, 0);
   };
 
-  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page - 1);
+  const handleBackButtonClick = () => {
+    onPageChange(null, page - 1);
   };
 
-  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, page + 1);
+  const handleNextButtonClick = () => {
+    onPageChange(null, page + 1);
   };
 
-  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  const handleLastPageButtonClick = () => {
+    onPageChange(null, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
+      <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="first page">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
+      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
         {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
       </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
+      <IconButton onClick={handleNextButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="next page">
         {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
       </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
+      <IconButton onClick={handleLastPageButtonClick} disabled={page >= Math.ceil(count / rowsPerPage) - 1} aria-label="last page">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
 }
 
-const CustomPaginationActionsTable = ({ data }: { data: any[] }) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+const CustomPaginationActionsTable = ({ data }: { data: getdatatype[] }) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -108,10 +80,7 @@ const CustomPaginationActionsTable = ({ data }: { data: any[] }) => {
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableBody>
-          {(rowsPerPage > 0
-            ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : data
-          ).map((row) => (
+          {(rowsPerPage > 0 ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data).map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
                 {row.title}
@@ -138,7 +107,7 @@ const CustomPaginationActionsTable = ({ data }: { data: any[] }) => {
               count={data.length}
               rowsPerPage={rowsPerPage}
               page={page}
-              onPageChange={handleChangePage}
+              onPageChange={(_, newPage) => handleChangePage(newPage)}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
@@ -150,13 +119,13 @@ const CustomPaginationActionsTable = ({ data }: { data: any[] }) => {
 };
 
 interface getdatatype {
-    id: number;
-    userId: number;
-    title: string;
+  id: number;
+  userId: number;
+  title: string;
 }
 
 const SecondTable = () => {
-  const [data, setData] = useState<getdatatype>([]);
+  const [data, setData] = useState<getdatatype[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,7 +149,7 @@ const SecondTable = () => {
   return (
     <div>
       <h1 className='my-8 text-center font-bold text-4xl'>
-        User Data (Title , UsrerId , Id)
+        User Data (Title, UserId, Id)
       </h1>
       <div className='w-5/6 mx-auto my-16'>
         <CustomPaginationActionsTable data={data} />

@@ -1,4 +1,4 @@
-import React from "react"
+
 import SecondTable from "./SecondTable"
 import CheckboxSelection from "./dipartment"
 
