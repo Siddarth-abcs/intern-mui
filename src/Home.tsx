@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+
 
 interface UserInfo {
     name: string;
-    phone: number;
+    phone: string;
     email: string;
 }
 
