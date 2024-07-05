@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import React,{ useState, ChangeEvent, FormEvent } from 'react';
 
 interface UserInfo {
     name: string;
@@ -9,7 +9,7 @@ interface UserInfo {
 function Home() {
     const [user, setUser] = useState<UserInfo>({
         name: '',
-        phone: 0,
+        phone: '',
         email: ''
     });
 
