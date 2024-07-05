@@ -1,4 +1,4 @@
-
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 interface UserInfo {
     name: string;
@@ -9,13 +9,13 @@ interface UserInfo {
 function Home() {
     const [user, setUser] = useState<UserInfo>({ name: '', phone: '', email: '' });
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
         localStorage.setItem('userdata', JSON.stringify(user));
-        window.location.href = "/secondpage"
+        window.location.href = "/secondpage";
     };
 
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setUser((prevUser) => ({
             ...prevUser,
